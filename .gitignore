@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
 [Uu]serSettings/
 QCAR/
 
@@ -46,6 +46,7 @@ ExportedObj/
 *.VC.db
 *.tgz
 *.somedata16
+*.vsconfig
 
 # Unity3D generated meta files
 *.pidb.meta
