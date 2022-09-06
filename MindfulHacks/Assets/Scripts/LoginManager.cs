@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
@@ -16,13 +15,15 @@ public class LoginManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
+        PlayerInfo _data = PlayerManager.Instance.data;
+        if (_data.loggedIn)
+        {
+            InputEmail.text = _data.email;
+            InputPassword.text = _data.password;
+            Login();
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        NavigationManager.Instance.ShowNav(false);
     }
 
     public void ResetParameters()
@@ -60,7 +61,12 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
-        SceneManager.LoadScene("HomeScreen");
+        PlayerInfo data = PlayerManager.Instance.data;
+        data.email = InputEmail.text;
+        data.password = InputPassword.text;
+        data.loggedIn = true;
+        PlayerManager.Instance.SaveProgress();
+        NavigationManager.LoadScene("HomeScreen");
     }
 
     public void Register()
@@ -89,6 +95,7 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
+        LoginStatus.text = "Registration successful";
         databaseManager.AddAccount(InputEmail.text, InputPassword.text);
     }
 }
