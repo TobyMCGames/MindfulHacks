@@ -18,4 +18,17 @@ public class CSVHandler
 
         return lines;
     }
+
+    public static List<string> ReadCSV(TextAsset textAsset)
+    {
+        List<string> lines = new List<string>();
+        string AssetLines = textAsset.text;
+        int startAt = 0;
+        //while (true)
+        //{
+        //    startAt = AssetLines.IndexOf("\n", startAt);
+        //}
+        startAt = AssetLines.IndexOf("\n", startAt);
+        return null;
+    }
 }
