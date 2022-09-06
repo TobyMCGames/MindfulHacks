@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
@@ -23,6 +22,8 @@ public class LoginManager : MonoBehaviour
             InputPassword.text = _data.password;
             Login();
         }
+
+        NavigationManager.Instance.ShowNav(false);
     }
 
     public void ResetParameters()
@@ -65,7 +66,7 @@ public class LoginManager : MonoBehaviour
         data.password = InputPassword.text;
         data.loggedIn = true;
         PlayerManager.Instance.SaveProgress();
-        SceneManager.LoadScene("HomeScreen");
+        NavigationManager.LoadScene("HomeScreen");
     }
 
     public void Register()
