@@ -16,13 +16,13 @@ public class LoginManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        PlayerInfo _data = PlayerManager.Instance.data;
+        if (_data.loggedIn)
+        {
+            InputEmail.text = _data.email;
+            InputPassword.text = _data.password;
+            Login();
+        }
     }
 
     public void ResetParameters()
@@ -60,6 +60,11 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
+        PlayerInfo data = PlayerManager.Instance.data;
+        data.email = InputEmail.text;
+        data.password = InputPassword.text;
+        data.loggedIn = true;
+        PlayerManager.Instance.SaveProgress();
         SceneManager.LoadScene("HomeScreen");
     }
 
@@ -89,6 +94,7 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
+        LoginStatus.text = "Registration successful";
         databaseManager.AddAccount(InputEmail.text, InputPassword.text);
     }
 }
