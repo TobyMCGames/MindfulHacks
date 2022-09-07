@@ -45,6 +45,7 @@ public class IntroSetup : MonoBehaviour
         {
             PlayerManager.Instance.data.FirstLogin = false;
             NavigationManager.LoadScene("HomeScreen");
+            NavigationManager.Instance.ShowNav(true);
         }
     }
 }
