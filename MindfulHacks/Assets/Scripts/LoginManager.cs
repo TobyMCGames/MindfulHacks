@@ -19,12 +19,12 @@ public class LoginManager : MonoBehaviour
     void Start()
     {
         PlayerInfo _data = PlayerManager.Instance.data;
-        //if (_data.loggedIn)
-        //{
-        //    InputEmail.text = _data.email;
-        //    InputPassword.text = _data.password;
-        //    Login();
-        //}
+        if (_data.loggedIn)
+        {
+            InputEmail.text = _data.email;
+            InputPassword.text = _data.password;
+            Login();
+        }
 
         NavigationManager.Instance.ShowNav(false);
     }

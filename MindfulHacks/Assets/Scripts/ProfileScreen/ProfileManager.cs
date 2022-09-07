@@ -1,24 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
-public class IntroSetup : MonoBehaviour
+public class ProfileManager : MonoBehaviour
 {
-    [SerializeField] private QuestionManager questionManager;
+    [SerializeField] private Text Name;
+    [SerializeField] private Text Email;
+    [SerializeField] private Text UserType;
+    [SerializeField] private Text HelpWith;
 
-    [SerializeField] TextAsset MoodFile;
-    [SerializeField] TextAsset ProblemFile;
-    [SerializeField] TextAsset UserTypeFile;
+    [SerializeField] private TextAsset MoodFile;
+    [SerializeField] private TextAsset ProblemFile;
+
+    [SerializeField] private GameObject QuestionScreen;
+
+    [SerializeField] private QuestionManager questionManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        UpdateProfile();
+
         List<string> Moods = CSVHandler.ReadCSV(MoodFile);
         List<string> Problems = CSVHandler.ReadCSV(ProblemFile);
-        List<string> UserTypes = CSVHandler.ReadCSV(UserTypeFile);
-
-        questionManager.AddQuestion("Hey there! What's your name?", null, QuestionManager.QUESTION_TYPES.STRING_INPUT);
-        questionManager.AddQuestion("What do you need help with?", UserTypes, QuestionManager.QUESTION_TYPES.SINGLE_MCQ);
 
         if (Moods != null)
             questionManager.AddQuestion("How are you feeling today?", Moods, QuestionManager.QUESTION_TYPES.MCQ);
@@ -31,7 +37,22 @@ public class IntroSetup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
+    }
+    void UpdateProfile()
+    {
+        Name.text = "Name: " + PlayerManager.Instance.data.email;
+        Email.text = "Email: " + PlayerManager.Instance.data.email;
+        UserType.text = "User Type: " + PlayerManager.Instance.data.UserType;
+        HelpWith.text = "Need Help with : ";
+        for (int i = 0; i < PlayerManager.Instance.data.Problems.Count; i++)
+        {
+            if (i > 0)
+                HelpWith.text += ", ";
+            HelpWith.text += PlayerManager.Instance.data.Problems[i];
+        }
+
+        Debug.Log("You have clicked the button!");
     }
 
     public void GetAnswers()
@@ -54,15 +75,7 @@ public class IntroSetup : MonoBehaviour
 
         switch (questionManager.curQuestion)
         {
-            case 0:
-                PlayerManager.Instance.data.name = questionManager.stringInput.text;
-                PlayerManager.Instance.SaveProgress();
-                break;
             case 1:
-                PlayerManager.Instance.data.UserType = questionManager.SelectedAnswers[0];
-                PlayerManager.Instance.SaveProgress();
-                break;
-            case 3:
                 PlayerManager.Instance.data.Problems = questionManager.SelectedAnswers;
                 PlayerManager.Instance.SaveProgress();
                 break;
@@ -71,10 +84,9 @@ public class IntroSetup : MonoBehaviour
         if (!questionManager.AnsweredQuestion())
         {
             PlayerManager.Instance.ReadData();
-            PlayerManager.Instance.data.FirstLogin = false;
-            PlayerManager.Instance.SaveProgress();
+            QuestionScreen.SetActive(false);
             NavigationManager.Instance.ShowNav(true);
-            NavigationManager.LoadScene("HomeScreen");
+            UpdateProfile();
         }
     }
 }
