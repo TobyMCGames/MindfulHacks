@@ -12,16 +12,19 @@ public class LoginManager : MonoBehaviour
     [SerializeField] private InputField InputConfirmPassword;
     [SerializeField] private Text LoginStatus;
 
+    [SerializeField] private GameObject LoginScreen;
+    [SerializeField] private GameObject QuestionScreen;
+
     // Start is called before the first frame update
     void Start()
     {
         PlayerInfo _data = PlayerManager.Instance.data;
-        if (_data.loggedIn)
-        {
-            InputEmail.text = _data.email;
-            InputPassword.text = _data.password;
-            Login();
-        }
+        //if (_data.loggedIn)
+        //{
+        //    InputEmail.text = _data.email;
+        //    InputPassword.text = _data.password;
+        //    Login();
+        //}
 
         NavigationManager.Instance.ShowNav(false);
     }
@@ -66,7 +69,14 @@ public class LoginManager : MonoBehaviour
         data.password = InputPassword.text;
         data.loggedIn = true;
         PlayerManager.Instance.SaveProgress();
-        NavigationManager.LoadScene("HomeScreen");
+
+        if (PlayerManager.Instance.data.FirstLogin)
+        {
+            LoginScreen.SetActive(false);
+            QuestionScreen.SetActive(true);
+        }
+        else
+            NavigationManager.LoadScene("HomeScreen");
     }
 
     public void Register()
