@@ -5,33 +5,68 @@ using UnityEngine.UI;
 
 public class QuestionManager : MonoBehaviour
 {
+    public enum QUESTION_TYPES
+    {
+        MCQ,
+        SINGLE_MCQ,
+        STRING_INPUT
+    }
+
     [SerializeField] private Text QuestionText;
     [SerializeField] private RectTransform QuestionContent;
     [SerializeField] private Button AnswerPrefab;
 
+    [SerializeField] private GameObject MCQ_Object;
+    [SerializeField] private GameObject StringInput_Object;
+
+    public InputField stringInput;
+
     public MyDictionary<string, List<string>> Questions;
+    public List<QUESTION_TYPES> QuestionTypeOrder = new List<QUESTION_TYPES>();
     public List<string> SelectedAnswers = new List<string>();
 
     public int curQuestion = -1;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-
+        curQuestion = -1;
     }
 
-    public void AddQuestion(string _question, List<string> _Asnwers)
+    public void AddQuestion(string _question, List<string> _Asnwers, QUESTION_TYPES _type)
     {
         Questions.Add(_question, _Asnwers);
+        QuestionTypeOrder.Add(_type);
     }
 
     public bool NextQuestion()
     {
-        if (curQuestion >= Questions.Count)
+        if (curQuestion >= Questions.Count - 1)
             return false;
+
+        curQuestion++;
+
+        // Set Appropriate Question
+        switch (QuestionTypeOrder[curQuestion])
+        {
+            case QUESTION_TYPES.SINGLE_MCQ:
+                MCQ_Object.SetActive(true);
+                break;
+            case QUESTION_TYPES.MCQ:
+                MCQ_Object.SetActive(true);
+                break;
+            case QUESTION_TYPES.STRING_INPUT:
+                StringInput_Object.SetActive(true);
+                break;
+        }
 
         // Getting Question
         QuestionText.text = Questions.ElementAt(curQuestion).a;
+
+        // For MCQ generation
+        if (QuestionTypeOrder[curQuestion] != QUESTION_TYPES.MCQ && QuestionTypeOrder[curQuestion] != QUESTION_TYPES.SINGLE_MCQ)
+            return true;
+
+        // Getting Answers
         List<string> answers = Questions.ElementAt(curQuestion).b;
 
         // Organising
@@ -43,7 +78,10 @@ public class QuestionManager : MonoBehaviour
         for (int i = 0; i < answers.Count; i++)
         {
             Button answerBtn = Instantiate<Button>(AnswerPrefab, QuestionContent);
-            answerBtn.onClick.AddListener(delegate { SelectAnswer(answerBtn.transform.GetChild(0).GetComponent<Text>().text); });
+            if (QuestionTypeOrder[curQuestion] == QUESTION_TYPES.MCQ)
+                answerBtn.onClick.AddListener(delegate { SelectMultiAnswer(answerBtn.transform.GetChild(0).GetComponent<Text>().text); });
+            else if (QuestionTypeOrder[curQuestion] == QUESTION_TYPES.SINGLE_MCQ)
+                answerBtn.onClick.AddListener(delegate { SelectOneAnswer(answerBtn.transform.GetChild(0).GetComponent<Text>().text); });
 
             // Assign Positions
             RectTransform answerBox = answerBtn.GetComponent<RectTransform>();
@@ -72,8 +110,6 @@ public class QuestionManager : MonoBehaviour
 
         }
 
-        curQuestion++;
-
         return true;
     }
 
@@ -85,6 +121,10 @@ public class QuestionManager : MonoBehaviour
         }
 
         SelectedAnswers.Clear();
+        stringInput.text = "";
+
+        MCQ_Object.SetActive(false);
+        StringInput_Object.SetActive(false);
     }
 
     public bool AnsweredQuestion()
@@ -93,7 +133,7 @@ public class QuestionManager : MonoBehaviour
         return NextQuestion();
     }
 
-    public void SelectAnswer(string _answer)
+    public void SelectMultiAnswer(string _answer)
     {
         for (int i = 0; i < SelectedAnswers.Count; i++)
         {
@@ -106,5 +146,13 @@ public class QuestionManager : MonoBehaviour
 
         SelectedAnswers.Add(_answer);
         return;
+    }
+
+    public void SelectOneAnswer(string _answer)
+    {
+        if (SelectedAnswers.Count >= 1)
+            SelectedAnswers.Clear();
+
+        SelectedAnswers.Add(_answer);
     }
 }

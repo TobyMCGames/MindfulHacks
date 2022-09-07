@@ -41,4 +41,9 @@ public class PlayerManager : MonoBehaviour
     {
         SaveSystem<PlayerInfo>.WriteFile(dataFilePath, data);
     }
+
+    public void ReadData()
+    {
+        data = SaveSystem<PlayerInfo>.ReadFile(dataFilePath);
+    }
 }
