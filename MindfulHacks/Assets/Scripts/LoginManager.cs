@@ -19,14 +19,14 @@ public class LoginManager : MonoBehaviour
     void Start()
     {
         PlayerInfo _data = PlayerManager.Instance.data;
+
+        NavigationManager.Instance.ShowNav(false);
         if (_data.loggedIn)
         {
             InputEmail.text = _data.email;
             InputPassword.text = _data.password;
             Login();
         }
-
-        NavigationManager.Instance.ShowNav(false);
     }
 
     public void ResetParameters()
@@ -76,7 +76,10 @@ public class LoginManager : MonoBehaviour
             QuestionScreen.SetActive(true);
         }
         else
+        {
+            NavigationManager.Instance.ShowNav(true);
             NavigationManager.LoadScene("HomeScreen");
+        }
     }
 
     public void Register()

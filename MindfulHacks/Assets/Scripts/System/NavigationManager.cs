@@ -22,7 +22,8 @@ public class NavigationManager : MonoBehaviour
 
     public static void LoadScene(string _sceneName)
     {
-        SceneManager.LoadScene(_sceneName);
+        if (SceneManager.GetActiveScene().name != _sceneName)
+            SceneManager.LoadScene(_sceneName);
     }
 
     public void ShowNav(bool _show)

@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ProfileScreen.unity
     guid: a7447f56f84773949971b89e7940e8bd
+  - enabled: 1
+    path: Assets/Scenes/ListenerScreen.unity
+    guid: ae000831b0c64534697cfcc025c35aa1
   m_configObjects: {}
