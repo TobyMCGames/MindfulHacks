@@ -13,4 +13,7 @@ public class PlayerInfo
 
     // Tutorial Info
     public bool FirstLogin = true;
+
+    // PlayerIssues
+    public List<string> Problems = new List<string>();
 }
