@@ -24,11 +24,17 @@ public class CSVHandler
         List<string> lines = new List<string>();
         string AssetLines = textAsset.text;
         int startAt = 0;
-        //while (true)
-        //{
-        //    startAt = AssetLines.IndexOf("\n", startAt);
-        //}
-        startAt = AssetLines.IndexOf("\n", startAt);
-        return null;
+        while (true)
+        {
+            int EndAt = AssetLines.IndexOf("\n", startAt);
+
+            if (EndAt <= 0)
+                break;
+
+            lines.Add(AssetLines.Substring(startAt, EndAt - startAt - 1));
+
+            startAt = EndAt + 1;
+        }
+        return lines;
     }
 }
