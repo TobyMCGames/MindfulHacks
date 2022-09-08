@@ -41,7 +41,7 @@ public class ProfileManager : MonoBehaviour
     }
     void UpdateProfile()
     {
-        Name.text = "Name: " + PlayerManager.Instance.data.email;
+        Name.text = "Name: " + PlayerManager.Instance.data.name;
         Email.text = "Email: " + PlayerManager.Instance.data.email;
         UserType.text = "User Type: " + PlayerManager.Instance.data.UserType;
         HelpWith.text = "Need Help with : ";
