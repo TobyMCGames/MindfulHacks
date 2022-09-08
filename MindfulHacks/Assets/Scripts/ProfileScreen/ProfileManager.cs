@@ -89,4 +89,9 @@ public class ProfileManager : MonoBehaviour
             UpdateProfile();
         }
     }
+
+    public void ShowNav(bool _show)
+    {
+        NavigationManager.Instance.ShowNav(_show);
+    }
 }
